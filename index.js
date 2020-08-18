@@ -42,11 +42,19 @@ console.log(getYears(getFinals(fifaData)));
 
 /* Task 4: Implement a higher-order function called `getWinners`, that accepts the callback function `getFinals()` and determine the winner (home or away) of each `finals` game. Return the name of all winning countries in an array called `winners` */
 
-function getWinners(cb) {
-  /* code here */
+function getWinners(getFinals) {
+  const arr = getFinals;
+  const winners = [];
+  for (let i in arr) {
+    if (arr[i]["Away Team Goals"] > arr[i]["Home Team Goals"]) {
+      winners.push(arr[i]["Away Team Name"]);
+    } else {
+      winners.push(arr[i]["Home Team Name"]);
+    }
+  }
+  return winners;
 }
-
-getWinners();
+console.log(getWinners(getFinals(fifaData)));
 
 /* Task 5: Implement a higher-order function called `getWinnersByYear` that accepts the following parameters and returns a set of strings "In {year}, {country} won the world cup!" 
 
@@ -55,17 +63,39 @@ Parameters:
  * callback function getYears
  */
 
-function getWinnersByYear(/* code here */) {}
+function getWinnersByYear(getYears, getWinners, getFinals) {
+  const year = getYears(getFinals(fifaData));
+  const winners = getWinners(getFinals(fifaData));
+  const returnArr = [];
+  for (let i in year) {
+    returnArr.push(`In ${year[i]}, ${winners[i]} won the world cup!`);
+  }
+  return returnArr;
+}
 
-getWinnersByYear();
+console.log(getWinnersByYear(getYears, getWinners, getFinals));
 
 /* Task 6: Write a function called `getAverageGoals` that accepts a parameter `data` and returns the the average number of home team goals and away team goals scored per match (Hint: use .reduce and do this in 2 steps) */
 
-function getAverageGoals(/* code here */) {
-  /* code here */
+function getAverageGoals(data) {
+  const home = [];
+  const away = [];
+  data.forEach((item) => {
+    home.push(item["Home Team Goals"]);
+    away.push(item["Away Team Goals"]);
+  });
+  let homeAverage = home.reduce((item, accumulator) => item + accumulator, 0);
+  let awayAverage = away.reduce((item, accumulator) => item + accumulator, 0);
+  homeAverage /= home.length;
+  awayAverage /= away.length;
+  return { homeAverage, awayAverage };
 }
+console.log(getAverageGoals(fifaData));
 
-getAverageGoals();
+// //.reduce()
+// const singleValue = array.reduce(function(accumulator, item){
+//   return accumulator + item.whateverItemYourAreWorkingWith;
+// },itinitalValue);
 
 /// STRETCH 🥅 //
 
